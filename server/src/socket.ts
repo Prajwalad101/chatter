@@ -1,10 +1,13 @@
 import { Server } from 'socket.io';
+import EVENTS from '../utils/events';
 import {
   ClientToServerEvents,
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from './types/ServerType';
+} from './types/socket.interfaces';
+
+const message = EVENTS['chat message'];
 
 function socket(
   io: Server<
@@ -15,10 +18,9 @@ function socket(
   >
 ) {
   // listens to connection event for incoming sockets
-  io.on('connection', (socket) => {
-    console.log(`User connected: ` + socket.id);
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
+  io.on(EVENTS.connection, (socket) => {
+    socket.on(EVENTS['chat message'], (message) => {
+      io.emit(EVENTS['chat message'], message);
     });
   });
 }
