@@ -1,10 +1,25 @@
 import { Server } from 'socket.io';
-import EVENTS from '../../utils/events';
+import {
+  ClientToServerEvents,
+  InterServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from './types/ServerType';
 
-function socket(io: Server) {
+function socket(
+  io: Server<
+    ClientToServerEvents,
+    ServerToClientEvents,
+    InterServerEvents,
+    SocketData
+  >
+) {
   // listens to connection event for incoming sockets
-  io.on(EVENTS.connection, (socket) => {
-    console.log('User connected: ' + socket.id);
+  io.on('connection', (socket) => {
+    console.log(`User connected: ` + socket.id);
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
   });
 }
 

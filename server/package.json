@@ -2,10 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "tsc": "tsc -w",
-    "dev": "nodemon dist/app.js"
+    "dev": "nodemon dist/src/app.js"
   },
   "keywords": [],
   "author": "",

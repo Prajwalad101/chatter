@@ -23,5 +23,5 @@ const io = new Server(httpServer, {
 socket(io);
 
 httpServer.listen(port, host, () => {
-  console.log(`The server is listening of port ${port}`);
+  console.log(`The server is listening at port ${port}`);
 });
