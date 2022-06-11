@@ -14,6 +14,7 @@ type Context = {
   setMessages: Function;
   typingUser: string;
   setTypingUser: Function;
+  messageLength?: number;
 };
 
 // get the socket instance
@@ -25,31 +26,39 @@ const SocketContext = createContext<Context | undefined>(undefined);
 function SocketProvider({ children }: SocketProviderProps) {
   const [messages, setMessages] = useState<string[]>([]);
   const [typingUser, setTypingUser] = useState<string>('');
+  const [messageLength, setMessageLength] = useState<number | undefined>();
 
   // receive messages
   useEffect(() => {
     socket.once(EVENTS['chat message'], (message: string) => {
-      console.log('message called');
       setMessages([...messages, message]);
     });
   }, [messages]);
 
   // receive and event if the user types
   useEffect(() => {
-    socket.on('type', (username) => {
+    socket.on('type', ({ user: username, messageLength }) => {
       setTypingUser(username);
+      setMessageLength(messageLength);
     });
   }, []);
 
   // also receive an event is user removes the typed message
   useEffect(() => {
-    socket.on('untype', (_username) => {
+    socket.on('untype', (_user) => {
       setTypingUser('');
     });
   });
 
   // set context value
-  const value = { socket, messages, setMessages, typingUser, setTypingUser };
+  const value = {
+    socket,
+    messages,
+    setMessages,
+    messageLength,
+    typingUser,
+    setTypingUser,
+  };
 
   return (
     <SocketContext.Provider value={value}>{children}</SocketContext.Provider>

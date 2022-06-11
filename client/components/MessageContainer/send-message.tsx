@@ -28,10 +28,13 @@ function SendMessage({ nickname }: SendMessageProps) {
       return;
     }
 
-    if (message.length > 0) {
-      socket.emit('type', nickname);
+    const messageLength = message.length;
+    const typeValue = { user: nickname, messageLength };
+
+    if (messageLength > 0) {
+      socket.emit('type', typeValue);
     } else {
-      socket.emit('untype', nickname);
+      socket.emit('untype', typeValue);
     }
   }, [messageInput, nickname, socket]);
 

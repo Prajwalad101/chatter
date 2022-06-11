@@ -25,13 +25,13 @@ function socket(
     });
 
     // when a user types a message
-    socket.on('type', (username) => {
-      socket.broadcast.emit('type', username);
+    socket.on('type', (typeInfo) => {
+      socket.broadcast.emit('type', typeInfo);
     });
 
     // when a user untypes a message
-    socket.on('untype', (username) => {
-      socket.broadcast.emit('untype', username);
+    socket.on('untype', (typeInfo) => {
+      socket.broadcast.emit('untype', typeInfo);
     });
   });
 }
