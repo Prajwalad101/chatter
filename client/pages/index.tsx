@@ -1,15 +1,7 @@
 import type { NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { SERVER_URL } from '../config/default';
-import {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../types/socket.interfaces';
+import { useSocket } from '../context/socket.context';
 import EVENTS from '../utils/events';
-
-const url = SERVER_URL;
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(url);
 
 const Home: NextPage = () => {
   const [messageInput, setMessageInput] = useState('');
@@ -17,12 +9,14 @@ const Home: NextPage = () => {
 
   const messageEndRef = useRef<HTMLDivElement>(null);
 
+  const socket = useSocket();
+
   useEffect(() => {
     socket.on(EVENTS['chat message'], (message) => {
       setMessages([...messages, message]);
     });
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, socket]);
 
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
