@@ -28,7 +28,8 @@ function SocketProvider({ children }: SocketProviderProps) {
 
   // receive messages
   useEffect(() => {
-    socket.on(EVENTS['chat message'], (message) => {
+    socket.once(EVENTS['chat message'], (message: string) => {
+      console.log('message called');
       setMessages([...messages, message]);
     });
   }, [messages]);
